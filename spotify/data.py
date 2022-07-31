@@ -1,26 +1,21 @@
-def metadata(inputFile, title, artist, album, bpm, path):
-    import subprocess
-    import os
-    name = inputFile.split(".")[0]
+def metadata(inputFile, title, artist, album, bpm, key, energy):
 
-    outputFile = str(f"{name}_metadata_.flac",)
+    def proper_round(num, dec=0):
+        num = str(num)[:str(num).index('.')+dec+2]
+        if num[-1]>='5':
+            return float(num[:-2-(not dec)]+str(int(num[-2-(not dec)])+1))
+        return float(num[:-1])
 
-
-    cmd = [
-        "ffmpeg", "-y", "-i", f"{inputFile}",
-        "-metadata", f"title={title}",
-        "-metadata", f"artist={artist}",
-        "-metadata", f"album={album}",
-        "-metadata", f"beats-per-minute={bpm}",
-        "-codec", "copy", f"{outputFile}",
-    ]
-    print ("cmd: " + str(cmd))
-    subprocess.run(cmd, cwd=path)
-    
-    newfilename = outputFile.replace("_metadata_", "")
-    print ("newfilename: " + str(newfilename))
-    os.replace(outputFile, newfilename)
-
+    from mutagen.flac import FLAC
+    audio = FLAC(inputFile)
+    audio["TITLE"] = title
+    audio["ALBUM"] = album
+    audio["ARTIST"] = artist
+    audio["COMMENT"] = "github.com/CLAW1200"
+    audio["GENRE"] = str(list(energy)[0])
+    audio["BPM"] = str(round(proper_round(list(bpm)[0])))
+    print(audio.pprint())
+    audio.save()
 
 
 def convertType(inputFile, path):

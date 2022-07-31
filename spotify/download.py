@@ -1,5 +1,5 @@
 
-def download_video(request, title, artist, album, bpm, path):
+def download_video(request, title, artist, album, bpm, key, energy, path):
     import yt_dlp as ydl
     import data as data
     print ("requestTitle " + request)
@@ -11,7 +11,7 @@ def download_video(request, title, artist, album, bpm, path):
             filename = (d['filename'])
             print ("filename ", filename)
             filename = str(data.convertType(filename, path))
-            data.metadata(filename, title, artist, album, bpm, path)
+            data.metadata(filename, title, artist, album, bpm, key, energy)
 
 
     ydl_opts = {
