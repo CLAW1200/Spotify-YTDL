@@ -1,0 +1,6 @@
+.vscode/launch.json
+spotify/__pycache__/data.cpython-39.pyc
+spotify/__pycache__/download_handler.cpython-39.pyc
+spotify/__pycache__/spotify_playlist_handler.cpython-39.pyc
+spotify/__pycache__/playlist.cpython-39.pyc
+spotify/.cache

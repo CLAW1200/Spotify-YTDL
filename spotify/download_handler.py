@@ -1,27 +1,31 @@
 
-def download_video(request):
+def download_video(request, title, artist, album, bpm, path):
     import yt_dlp as ydl
+    import data as data
     print ("requestTitle " + request)
 
     def my_hook(d):
         status = (d['status'])
-        print (status)
+        print ("status ", status)
+        if status == 'finished':
+            filename = (d['filename'])
+            print ("filename ", filename)
+            filename = str(data.convertType(filename, path))
+            data.metadata(filename, title, artist, album, bpm, path)
+
 
     ydl_opts = {
+    'progress_hooks': [my_hook],
+    'quiet': True,
     'format':'bestaudio/best',
-    'extractaudio':True,
     'match-title':f"{request}",
-    'audioformat':'mp3',
     'default_search': 'ytsearch',
+    'extract-audio': True,
+    'audio-format': 'wav',
     'outtmpl':'%(title)s.%(ext)s',
     'noplaylist':True,
     'nocheckcertificate':True,
-    'postprocessors': [{
-        'key': 'FFmpegExtractAudio',
-        'preferredcodec': 'mp3',
-        'preferredquality': '320',
-    }]
-}
+    }
     with ydl.YoutubeDL(ydl_opts) as ydl:
         ydl.download([request])
     
