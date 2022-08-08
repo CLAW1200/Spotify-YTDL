@@ -28,5 +28,3 @@ def download_video(request, title, artist, album, bpm, key, energy, path):
     }
     with ydl.YoutubeDL(ydl_opts) as ydl:
         ydl.download([request])
-    
-

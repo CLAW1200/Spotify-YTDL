@@ -15,9 +15,15 @@ def call_playlist(creator, playlist_id):
             break
         except FileNotFoundError:
             with open(file, "w") as f:
+
+                print ("\n")
+                print ("Not sure what your client id is?")
+                print ("Please visit https://developer.spotify.com/dashboard/applications and create a new application to get your client id and secret.")
+                print ("\n")
+                
                 cid = input("Enter your client id: ")
                 secret = input("Enter your client secret: ")
-                f.write(cid + "\n" + secret)
+                f.write(f"{cid}\n{secret}\nDO NOT SHARE THIS FILE OR ITS CONTENTS")
             continue
 
     subprocess.check_call(["attrib","+H",file])
@@ -34,8 +40,15 @@ def call_playlist(creator, playlist_id):
     playlist_df = pd.DataFrame(columns = playlist_features_list)
     
     #step2
-    
-    playlist = sp.user_playlist_tracks(creator, playlist_id)["items"]
+    try:
+        playlist = sp.user_playlist_tracks(creator, playlist_id)["items"]
+    except Exception:
+        print ("Playlist not found")
+        print ("Is the playlist public?")
+        print ("Press any key to exit")
+        input()
+        exit()
+
     for track in playlist:
         # Create empty dict
         playlist_features = {}

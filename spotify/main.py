@@ -15,7 +15,12 @@ if __name__ == "__main__":
 
     link = extractSpotifyLink(str(input("Enter the link of the playlist: ")))
     username = ""
-    os.chdir(str(input("Enter the path to save the playlist: ")))
+    try:
+        os.chdir(str(input("Enter the path to save the playlist: ")))
+    except OSError:
+        print ("Path not found")
+        print ("Path set to current directory")
+        os.chdir(os.getcwd())
     data = pl.call_playlist(username, link)
     print (data)
     for i in range(len(data)):

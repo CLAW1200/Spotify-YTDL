@@ -5,3 +5,5 @@ spotify/__pycache__/spotify_playlist_handler.cpython-39.pyc
 spotify/__pycache__/playlist.cpython-39.pyc
 spotify/.cache
 .vscode/settings.json
+spotify/main.py
+spotify/secret.keys
