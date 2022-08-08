@@ -3,8 +3,26 @@ def call_playlist(creator, playlist_id):
     import spotipy
     from spotipy.oauth2 import SpotifyClientCredentials
     import pandas as pd
-    cid = '3f45da55c2484df48105cf8705050028'
-    secret = '22384d0153914594b8ab8dc718bba01b'
+    import subprocess
+    
+    file = "secret.keys"
+    while True:
+        try:
+            with open(file, "r") as f:
+                keys = f.readlines()
+                cid = keys[0].strip()
+                secret = keys[1].strip()
+            break
+        except FileNotFoundError:
+            with open(file, "w") as f:
+                cid = input("Enter your client id: ")
+                secret = input("Enter your client secret: ")
+                f.write(cid + "\n" + secret)
+            continue
+
+    subprocess.check_call(["attrib","+H",file])
+
+
     client_credentials_manager = SpotifyClientCredentials(client_id=cid, client_secret=secret)
     sp = spotipy.Spotify(client_credentials_manager = client_credentials_manager)
 
