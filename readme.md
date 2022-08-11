@@ -1,14 +1,18 @@
+![Untitled-3](https://user-images.githubusercontent.com/92749103/184211319-5d444455-b21e-4d9c-ae07-5fced0d56e06.png)
 
 Download a Spotify Playlist by finding the corresponding audio on YouTube.
 Downloads as .FLAC with correct metadata.
 
-Getting Spotify's API access:
+
+
+Getting Spotify's API access:   
 - You just need a Spotify account.
 - Login to https://developer.spotify.com/dashboard/applications and create an application.
 - Open the app and copy the Client ID and Client Secret.
 - You will only need to enter these once.
   
-  
+
+
 Run either main.py or the executable and enter the link to the playlist you want to download.
 (Make sure the playlist is public!)
 
