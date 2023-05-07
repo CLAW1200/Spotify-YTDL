@@ -21,7 +21,7 @@ def download_video(request, title, artist, album, bpm, key, energy, path):
     'match-title':f"{request}",
     'default_search': 'ytsearch',
     'extract-audio': True,
-    'audio-format': 'wav',
+    'audio-format': 'flac',
     'outtmpl':'%(title)s.%(ext)s',
     'noplaylist':True,
     'nocheckcertificate':True,

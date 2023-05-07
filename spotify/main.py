@@ -26,7 +26,7 @@ if __name__ == "__main__":
     for i in range(len(data)):
         row = data.iloc[i].tolist()
         print (row)
-        request = str(f"{row[2]} {row[0]} {row[1]} topic")
+        request = str(f'{row[2]} {row[0]} {row[1]} "provided to youtube"')
         #track, artist, album
         print (request)
         dh.download_video(request, row[2], row[0], row[1], {row[13]}, {row[6]}, {row[5]}, os.getcwd())
