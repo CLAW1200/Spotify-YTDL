@@ -1,18 +1,31 @@
 from PyQt5.QtCore import QThread
+from PyQt5 import QtWidgets, uic, QtCore
 import os
 import download as dh
 import playlist as pl
-from PyQt5 import QtWidgets, uic
 import sys
-
 qtCreator_file  = "window.ui"
 Ui_MainWindow, QtBaseClass = uic.loadUiType(qtCreator_file)
 
+from PyQt5.QtCore import QThread, pyqtSignal
+
 class DownloadThread(QThread):
-    def __init__(self, link, save_path):
-        super().__init__()
+    # Define a custom signal that emits the current progress percentage
+    songProgress_updated = pyqtSignal(float)
+    totalProgress_updated = pyqtSignal(float)
+
+    def __init__(self, parent=None):
+        QThread.__init__(self, parent=parent)
+        self.link = None
+
+    def set_link(self, link):
         self.link = link
+
+    def set_save_path(self, save_path):
         self.save_path = save_path
+
+    def set_getFileFormat(self, getFileFormat):
+        self.getFileFormat = getFileFormat
 
     def run(self):
         username = ""
@@ -25,21 +38,28 @@ class DownloadThread(QThread):
         data = pl.call_playlist(username, self.link)
         print (data)
         for i in range(len(data)):
+            self.totalProgress_updated.emit((i+1)/len(data)*100)
             row = data.iloc[i].tolist()
             print (row)
             request = str(f'{row[2]} {row[0]} {row[1]} "provided to youtube"')
             #track, artist, album
             print (request)
-            dh.download_video(request, row[2], row[0], row[1], {row[13]}, {row[6]}, {row[5]}, os.getcwd())
+            dh.download_video(self, request, row[2], row[0], row[1], {row[13]}, {row[6]}, {row[5]}, os.getcwd(), self.getFileFormat)
+
 
         os.remove(".cache")
+        self.totalProgress_updated.emit(0)
+        self.songProgress_updated.emit(0)
+        if window.explorerCheckBox.isChecked():
+            os.startfile(os.getcwd())
 
-class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
-     
+
+class MainApp(QtWidgets.QMainWindow, Ui_MainWindow):
     def __init__(self):
         QtWidgets.QMainWindow.__init__(self)
         Ui_MainWindow.__init__(self)
         self.setupUi(self)
+        self.downloadThread = DownloadThread()
 
         #remove keys action 
         self.actionRemove_Keys.triggered.connect(self.removeKeys)
@@ -49,9 +69,18 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.actionSave_Keys.triggered.connect(self.saveKeys)
         #download playlist button
         self.downloadButton.clicked.connect(self.downloadPlaylist)
+        #dark mode action
+        self.darkModeCheckBox.stateChanged.connect(self.darkMode)
+        # Connect the progress_updated signal to a slot that updates the progress bar
+        self.downloadThread.songProgress_updated.connect(self.update_songProgress_bar)
+        self.downloadThread.totalProgress_updated.connect(self.update_totalProgress_bar)
 
-        self.download_thread = None
-
+    
+    def darkMode(self):
+        if self.darkModeCheckBox.isChecked():
+            self.setStyleSheet("background-color: rgb(54, 54, 54); color: rgb(255, 255, 255);")
+        else:
+            self.setStyleSheet("background-color: rgb(255, 255, 255); color: rgb(0, 0, 0);")
 
     def removeKeys(self):
         #edit the two line boxes to be empty
@@ -75,24 +104,37 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.spotifySecret.setText(f.readline().rstrip('\n'))
         f.close()
 
+    def getFileFormat(self):
+        #get the file format from the combo box
+        format = self.formatComboBox.currentText()
+        if format == "MP3":
+            return "mp3"
+        elif format == "FLAC":
+            return "flac"
 
     def downloadPlaylist(self):
-        if self.download_thread is not None and self.download_thread.isRunning():
-            print("Download already in progress.")
-            return
-
+        # Get playlist link
         link = self.playlistLinkBox.text()
-        save_path = self.savePathBox.text()
-        self.download_thread = DownloadThread(link, save_path)
-        self.download_thread.finished.connect(self.downloadFinished)
-        self.download_thread.start()
 
-    def downloadFinished(self):
-        print("Download completed.")
+        # Set the link in the DownloadThread object
+        self.downloadThread.set_link(link)
+        self.downloadThread.set_save_path(self.savePathBox.text())
+        self.downloadThread.set_getFileFormat(self.getFileFormat())
+
+        # Start the DownloadThread
+        self.downloadThread.start()
+
+    def update_songProgress_bar(self, progress):
+        # Update the progress bar with the received progress percentage
+        self.songProgressBar.setValue(int(progress))
+    
+    def update_totalProgress_bar(self, progress):
+        # Update the progress bar with the received progress percentage
+        self.totalProgressBar.setValue(int(progress))
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
-    window = MyApp()
+    window = MainApp()
     window.show()
     try:
         window.loadKeys()

@@ -23,7 +23,7 @@ def call_playlist(creator, playlist_id):
                 
                 cid = input("Enter your client id: ")
                 secret = input("Enter your client secret: ")
-                f.write(f"{cid}\n{secret}\nDO NOT SHARE THIS FILE OR ITS CONTENTS")
+                f.write(f"{cid}\n{secret}\n")
             continue
 
     subprocess.check_call(["attrib","+H",file])

@@ -7,13 +7,13 @@
     <x>0</x>
     <y>0</y>
     <width>413</width>
-    <height>300</height>
+    <height>320</height>
    </rect>
   </property>
   <property name="maximumSize">
    <size>
     <width>413</width>
-    <height>300</height>
+    <height>320</height>
    </size>
   </property>
   <property name="font">
@@ -35,7 +35,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>Enter Playlist Link</string>
+     <string>https://open.spotify.com/playlist/20u6LSUqZyWFnCtmgewUx0?si=6eae235a42c94258</string>
     </property>
    </widget>
    <widget class="QComboBox" name="formatComboBox">
@@ -54,12 +54,7 @@
     </item>
     <item>
      <property name="text">
-      <string>WAV</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>MP3 (Not Recomended)</string>
+      <string>MP3</string>
      </property>
     </item>
    </widget>
@@ -102,7 +97,7 @@
      </rect>
     </property>
    </widget>
-   <widget class="QProgressBar" name="downloadBar">
+   <widget class="QProgressBar" name="totalProgressBar">
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -112,7 +107,7 @@
      </rect>
     </property>
     <property name="value">
-     <number>24</number>
+     <number>0</number>
     </property>
    </widget>
    <widget class="QLabel" name="label">
@@ -165,6 +160,45 @@
     </property>
     <property name="text">
      <string>Enter Save Path</string>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="darkModeCheckBox">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>10</y>
+      <width>101</width>
+      <height>17</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Dark Mode</string>
+    </property>
+   </widget>
+   <widget class="QProgressBar" name="songProgressBar">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>240</y>
+      <width>391</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="value">
+     <number>0</number>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="explorerCheckBox">
+    <property name="geometry">
+     <rect>
+      <x>100</x>
+      <y>10</y>
+      <width>181</width>
+      <height>17</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Show Files When Complete</string>
     </property>
    </widget>
   </widget>

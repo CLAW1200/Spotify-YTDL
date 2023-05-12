@@ -18,12 +18,12 @@ def metadata(inputFile, title, artist, album, bpm, key, energy):
     audio.save()
 
 
-def convertType(inputFile, path, artist):
+def convertType(inputFile, path, artist, audio_format):
     import os
     import subprocess
     name = inputFile.split(".")[0]
     
-    outputFile = str(f"{name}.flac",)
+    outputFile = str(f"{name}.{audio_format}",)
     
 
     cmd = [
