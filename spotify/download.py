@@ -24,7 +24,8 @@ def download_video(self, request, title, artist, album, bpm, key, energy, path, 
         if status == 'finished':
             filename = (d['filename'])
             print ("filename ", filename)
-            filename = str(data.convertType(filename, path, artist, audio_format))
+            overwrite = self.get_overwriteCheckBox()
+            filename = str(data.convertType(filename, path, artist, audio_format, overwrite))
             data.metadata(filename, title, artist, album, bpm, key, energy)
 
 

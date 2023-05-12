@@ -204,7 +204,7 @@
      <string>Show Files When Complete</string>
     </property>
    </widget>
-   <widget class="QCheckBox" name="explorerCheckBox_2">
+   <widget class="QCheckBox" name="overwriteCheckBox">
     <property name="geometry">
      <rect>
       <x>270</x>
@@ -235,7 +235,6 @@
     <addaction name="actionImport_Keys"/>
     <addaction name="actionRemove_Keys"/>
     <addaction name="separator"/>
-    <addaction name="actionQuit"/>
    </widget>
    <addaction name="menuFile"/>
   </widget>

@@ -26,8 +26,11 @@ class DownloadThread(QThread):
     def set_save_path(self, save_path):
         self.save_path = save_path
 
-    def set_getFileFormat(self, getFileFormat):
-        self.getFileFormat = getFileFormat
+    def set_fileFormat(self, fileFormat):
+        self.fileFormat = fileFormat
+
+    def get_overwriteCheckBox(self):
+        return window.overwriteCheckBox.isChecked()
 
     def run(self):
         username = ""
@@ -47,7 +50,7 @@ class DownloadThread(QThread):
                 request = str(f'{row[2]} {row[0]} {row[1]} "provided to youtube"')
                 #track, artist, album
                 #print (request)
-                dh.download_video(self, request, row[2], row[0], row[1], {row[13]}, {row[6]}, {row[5]}, os.getcwd(), self.getFileFormat)
+                dh.download_video(self, request, row[2], row[0], row[1], {row[13]}, {row[6]}, {row[5]}, os.getcwd(), self.fileFormat)
 
             if window.explorerCheckBox.isChecked():
                 os.startfile(os.getcwd())
@@ -95,7 +98,7 @@ class MainApp(QtWidgets.QMainWindow, Ui_MainWindow):
         #empty the keys file
         with open(keys, "w") as f:
             f.write("")
-            f.close()
+        f.close()
 
 
     def saveKeys(self):
@@ -103,7 +106,7 @@ class MainApp(QtWidgets.QMainWindow, Ui_MainWindow):
         with open(keys, "w") as f:
             f.write(self.spotifyID.text() + "\n")
             f.write(self.spotifySecret.text())
-            f.close()
+        f.close()
 
     def loadKeys(self):
         #get first line of keys file
@@ -113,7 +116,7 @@ class MainApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.spotifySecret.setText(f.readline().rstrip('\n'))
         f.close()
 
-    def getFileFormat(self):
+    def fileFormat(self):
         #get the file format from the combo box
         format = self.formatComboBox.currentText()
         if format == "MP3":
@@ -128,7 +131,7 @@ class MainApp(QtWidgets.QMainWindow, Ui_MainWindow):
         # Set the link in the DownloadThread object
         self.downloadThread.set_link(link)
         self.downloadThread.set_save_path(self.savePathBox.text().replace("\\", "/"))
-        self.downloadThread.set_getFileFormat(self.getFileFormat())
+        self.downloadThread.set_fileFormat(self.fileFormat())
 
         # Start the DownloadThread
         self.downloadThread.start()

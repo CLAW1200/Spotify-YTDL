@@ -12,6 +12,7 @@ def call_playlist(creator, playlist_id, keys):
                 keys = f.readlines()
                 cid = keys[0].strip()
                 secret = keys[1].strip()
+            f.close()
             break
         except FileNotFoundError:
             print ("\n")
@@ -49,7 +50,7 @@ def call_playlist(creator, playlist_id, keys):
         return
     except spotipy.oauth2.SpotifyOauthError as e:
         print ("\n")
-        print ("Check Your Keys.")
+        print ("Check Your API Keys.")
         print (e)
         print ("\n")
         return

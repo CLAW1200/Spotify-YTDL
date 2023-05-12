@@ -18,7 +18,7 @@ def metadata(inputFile, title, artist, album, bpm, key, energy):
     audio.save()
 
 
-def convertType(inputFile, path, artist, audio_format):
+def convertType(inputFile, path, artist, audio_format, overwrite):
     import os
     import subprocess
     name = inputFile.split(".")[0]
@@ -26,11 +26,23 @@ def convertType(inputFile, path, artist, audio_format):
     outputFile = str(f"{name}.{audio_format}",)
     
 
-    cmd = [
+    cmd_overwrite = [
         "ffmpeg", "-i", f"{inputFile}",
-        "-c:a", "flac",
+        "-c:a", "flac", 
+        "-y",
         f"{artist} - {outputFile}",
     ]
+    cmd_no_overwrite = [
+        "ffmpeg", "-i", f"{inputFile}",
+        "-c:a", "flac", 
+        "-n",
+        f"{artist} - {outputFile}",
+    ]
+    if overwrite == True:
+        cmd = cmd_overwrite
+    else:
+        cmd = cmd_no_overwrite
+
     print ("cmd: " + str(cmd))
     subprocess.run(cmd, cwd=path)
     os.remove(inputFile)
