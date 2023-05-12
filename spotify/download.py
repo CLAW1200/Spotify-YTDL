@@ -10,7 +10,7 @@ def download_video(request, title, artist, album, bpm, key, energy, path):
         if status == 'finished':
             filename = (d['filename'])
             print ("filename ", filename)
-            filename = str(data.convertType(filename, path))
+            filename = str(data.convertType(filename, path, artist))
             data.metadata(filename, title, artist, album, bpm, key, energy)
 
 

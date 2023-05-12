@@ -18,7 +18,7 @@ def metadata(inputFile, title, artist, album, bpm, key, energy):
     audio.save()
 
 
-def convertType(inputFile, path):
+def convertType(inputFile, path, artist):
     import os
     import subprocess
     name = inputFile.split(".")[0]
@@ -29,11 +29,11 @@ def convertType(inputFile, path):
     cmd = [
         "ffmpeg", "-i", f"{inputFile}",
         "-c:a", "flac",
-        f"{outputFile}",
+        f"{artist} - {outputFile}",
     ]
     print ("cmd: " + str(cmd))
     subprocess.run(cmd, cwd=path)
     os.remove(inputFile)
-    return outputFile
+    return f"{artist} - {outputFile}"
 
     #ffmpeg -i memento.webm -c:a flac audio.flac 
