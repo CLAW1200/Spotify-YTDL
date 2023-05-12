@@ -18,7 +18,10 @@
   </property>
   <property name="font">
    <font>
-    <pointsize>10</pointsize>
+    <family>Open Sans</family>
+    <pointsize>8</pointsize>
+    <weight>75</weight>
+    <bold>true</bold>
    </font>
   </property>
   <property name="windowTitle">
@@ -77,9 +80,9 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>202</x>
+      <x>70</x>
       <y>30</y>
-      <width>201</width>
+      <width>251</width>
       <height>20</height>
      </rect>
     </property>
@@ -90,9 +93,9 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>202</x>
+      <x>70</x>
       <y>60</y>
-      <width>201</width>
+      <width>251</width>
       <height>20</height>
      </rect>
     </property>
@@ -113,7 +116,7 @@
    <widget class="QLabel" name="label">
     <property name="geometry">
      <rect>
-      <x>150</x>
+      <x>18</x>
       <y>30</y>
       <width>47</width>
       <height>21</height>
@@ -126,7 +129,7 @@
    <widget class="QLabel" name="label_2">
     <property name="geometry">
      <rect>
-      <x>150</x>
+      <x>18</x>
       <y>60</y>
       <width>47</width>
       <height>21</height>
@@ -159,7 +162,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>Enter Save Path</string>
+     <string>C:\Users\Carsten\Music</string>
     </property>
    </widget>
    <widget class="QCheckBox" name="darkModeCheckBox">
@@ -208,7 +211,7 @@
      <x>0</x>
      <y>0</y>
      <width>413</width>
-     <height>23</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">

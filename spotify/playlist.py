@@ -1,11 +1,11 @@
 
-def call_playlist(creator, playlist_id):
+def call_playlist(creator, playlist_id, keys):
     import spotipy
     from spotipy.oauth2 import SpotifyClientCredentials
     import pandas as pd
     import subprocess
     
-    file = "secret.keys"
+    file = keys
     while True:
         try:
             with open(file, "r") as f:
@@ -14,16 +14,15 @@ def call_playlist(creator, playlist_id):
                 secret = keys[1].strip()
             break
         except FileNotFoundError:
-            with open(file, "w") as f:
-
-                print ("\n")
-                print ("Not sure what your client id is?")
-                print ("Please visit https://developer.spotify.com/dashboard/applications and create a new application to get your client id and secret.")
-                print ("\n")
-                
-                cid = input("Enter your client id: ")
-                secret = input("Enter your client secret: ")
-                f.write(f"{cid}\n{secret}\n")
+            print ("\n")
+            print ("Not sure what your client id is?")
+            print ("Please visit https://developer.spotify.com/dashboard/applications and create an application to get your client id and secret.")
+            print ("\n")
+            continue
+        except IndexError:
+            print ("\n")
+            print ("Your keys file is empty. Please enter your client id and secret and save them.")
+            print ("\n")
             continue
 
     subprocess.check_call(["attrib","+H",file])

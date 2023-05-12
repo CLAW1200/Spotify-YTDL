@@ -1,13 +1,15 @@
 from PyQt5.QtCore import QThread
 from PyQt5 import QtWidgets, uic, QtCore
+from PyQt5.QtCore import QThread, pyqtSignal
 import os
 import download as dh
 import playlist as pl
 import sys
 qtCreator_file  = "window.ui"
 Ui_MainWindow, QtBaseClass = uic.loadUiType(qtCreator_file)
+keys = os.getcwd() + "\\secret.keys"
+print (keys)
 
-from PyQt5.QtCore import QThread, pyqtSignal
 
 class DownloadThread(QThread):
     # Define a custom signal that emits the current progress percentage
@@ -35,7 +37,7 @@ class DownloadThread(QThread):
             print ("Path not found")
             print ("Path set to current directory")
             os.chdir(os.getcwd())
-        data = pl.call_playlist(username, self.link)
+        data = pl.call_playlist(username, self.link, keys)
         print (data)
         for i in range(len(data)):
             self.totalProgress_updated.emit((i+1)/len(data)*100)
@@ -118,7 +120,7 @@ class MainApp(QtWidgets.QMainWindow, Ui_MainWindow):
 
         # Set the link in the DownloadThread object
         self.downloadThread.set_link(link)
-        self.downloadThread.set_save_path(self.savePathBox.text())
+        self.downloadThread.set_save_path(self.savePathBox.text().replace("\\", "/"))
         self.downloadThread.set_getFileFormat(self.getFileFormat())
 
         # Start the DownloadThread
