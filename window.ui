@@ -162,7 +162,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>C:\Users\Carsten\Music</string>
+     <string>C:\Users\%user%\Music</string>
     </property>
    </widget>
    <widget class="QCheckBox" name="darkModeCheckBox">
@@ -202,6 +202,19 @@
     </property>
     <property name="text">
      <string>Show Files When Complete</string>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="explorerCheckBox_2">
+    <property name="geometry">
+     <rect>
+      <x>270</x>
+      <y>10</y>
+      <width>181</width>
+      <height>17</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Overwrite</string>
     </property>
    </widget>
   </widget>

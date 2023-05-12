@@ -38,22 +38,26 @@ class DownloadThread(QThread):
             print ("Path set to current directory")
             os.chdir(os.getcwd())
         data = pl.call_playlist(username, self.link, keys)
-        print (data)
-        for i in range(len(data)):
-            self.totalProgress_updated.emit((i+1)/len(data)*100)
-            row = data.iloc[i].tolist()
-            print (row)
-            request = str(f'{row[2]} {row[0]} {row[1]} "provided to youtube"')
-            #track, artist, album
-            print (request)
-            dh.download_video(self, request, row[2], row[0], row[1], {row[13]}, {row[6]}, {row[5]}, os.getcwd(), self.getFileFormat)
+        #print (data)
+        if data is not None:
+            for i in range(len(data)):
+                self.totalProgress_updated.emit((i+1)/len(data)*100)
+                row = data.iloc[i].tolist()
+                print (row)
+                request = str(f'{row[2]} {row[0]} {row[1]} "provided to youtube"')
+                #track, artist, album
+                #print (request)
+                dh.download_video(self, request, row[2], row[0], row[1], {row[13]}, {row[6]}, {row[5]}, os.getcwd(), self.getFileFormat)
 
+            if window.explorerCheckBox.isChecked():
+                os.startfile(os.getcwd())
 
-        os.remove(".cache")
+        try:
+            os.remove(".cache")
+        except FileNotFoundError:
+            pass
         self.totalProgress_updated.emit(0)
         self.songProgress_updated.emit(0)
-        if window.explorerCheckBox.isChecked():
-            os.startfile(os.getcwd())
 
 
 class MainApp(QtWidgets.QMainWindow, Ui_MainWindow):
@@ -89,18 +93,21 @@ class MainApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.spotifyID.setText("")
         self.spotifySecret.setText("")
         #empty the keys file
-        open("secret.keys", "w").close()
+        with open(keys, "w") as f:
+            f.write("")
+            f.close()
+
 
     def saveKeys(self):
         #save the keys to the file
-        f = open("secret.keys", "w")
-        f.write(self.spotifyID.text() + "\n")
-        f.write(self.spotifySecret.text())
-        f.close()
+        with open(keys, "w") as f:
+            f.write(self.spotifyID.text() + "\n")
+            f.write(self.spotifySecret.text())
+            f.close()
 
     def loadKeys(self):
         #get first line of keys file
-        f = open("secret.keys", "r")
+        f = open(keys, "r")
         self.spotifyID.setText(f.readline().rstrip('\n'))
         #get second line of keys file
         self.spotifySecret.setText(f.readline().rstrip('\n'))

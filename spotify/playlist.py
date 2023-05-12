@@ -41,12 +41,18 @@ def call_playlist(creator, playlist_id, keys):
     #step2
     try:
         playlist = sp.user_playlist_tracks(creator, playlist_id)["items"]
-    except Exception:
-        print ("Playlist not found")
-        print ("Is the playlist public?")
-        print ("Press any key to exit")
-        input()
-        exit()
+    except spotipy.client.SpotifyException as e:
+        print ("\n")
+        print ("Check Your Playlist Link.")
+        print (e)
+        print ("\n")
+        return
+    except spotipy.oauth2.SpotifyOauthError as e:
+        print ("\n")
+        print ("Check Your Keys.")
+        print (e)
+        print ("\n")
+        return
 
     for track in playlist:
         # Create empty dict
