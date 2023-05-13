@@ -213,7 +213,7 @@
     <property name="geometry">
      <rect>
       <x>140</x>
-      <y>20</y>
+      <y>60</y>
       <width>231</width>
       <height>17</height>
      </rect>
@@ -226,7 +226,7 @@
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>20</y>
+      <y>60</y>
       <width>101</width>
       <height>17</height>
      </rect>
@@ -340,14 +340,35 @@
    <widget class="QRadioButton" name="expandWindowButton">
     <property name="geometry">
      <rect>
-      <x>480</x>
-      <y>0</y>
+      <x>410</x>
+      <y>10</y>
       <width>82</width>
       <height>17</height>
      </rect>
     </property>
+    <property name="layoutDirection">
+     <enum>Qt::RightToLeft</enum>
+    </property>
     <property name="text">
-     <string/>
+     <string>Console</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_5">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>10</y>
+      <width>361</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>22</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Spotify Playlist Downloader</string>
     </property>
    </widget>
   </widget>

@@ -142,6 +142,9 @@ class MainApp(QtWidgets.QMainWindow, Ui_MainWindow):
     def removeKeys(self):
         try:
             os.remove("secret.keys")
+            self.spotifyID.setText("")
+            self.spotifySecret.setText("")
+            print ("Keys Deleted")
         except FileNotFoundError as e:
             print(e)
         except PermissionError as e:
@@ -154,6 +157,7 @@ class MainApp(QtWidgets.QMainWindow, Ui_MainWindow):
                 f.write(self.spotifyID.text() + "\n")
                 f.write(self.spotifySecret.text())
             f.close()
+            print("Keys Saved")
         except FileNotFoundError as e:
             print(e)
         except PermissionError as e:
@@ -167,6 +171,7 @@ class MainApp(QtWidgets.QMainWindow, Ui_MainWindow):
             #get second line of keys file
             self.spotifySecret.setText(f.readline().rstrip('\n'))
             f.close()
+            print("Keys Loaded")
         except FileNotFoundError as e:
             print(e)
         except PermissionError as e:
