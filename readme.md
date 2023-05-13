@@ -1,5 +1,5 @@
 ![Untitled-3](https://user-images.githubusercontent.com/92749103/184211319-5d444455-b21e-4d9c-ae07-5fced0d56e06.png)
-#Download your spotify playlists as FLAC or MP3
+# Download your spotify playlists as FLAC or MP3
 
 - Download a Spotify Playlist by finding the corresponding audio on YouTube.
 - Downloads as FLAC or MP3 with correct metadata.
