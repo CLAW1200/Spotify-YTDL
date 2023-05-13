@@ -40,8 +40,10 @@ class DownloadThread(QThread):
         return window.overwriteCheckBox.isChecked()
 
     def run(self):
-
+            #default 
         #disable download button and boxes
+        window.spotifyID.setEnabled(False)
+        window.spotifySecret.setEnabled(False)
         window.downloadButton.setEnabled(False)
         window.playlistLinkBox.setEnabled(False)
         window.savePathBox.setEnabled(False)
@@ -56,8 +58,9 @@ class DownloadThread(QThread):
         except OSError:
             print ("Path not found")
             print ("Path set to current directory")
-            os.chdir(os.getcwd())
-        data = pl.call_playlist(username, self.link, keys)
+        os.chdir(os.getcwd())
+
+        data = pl.call_playlist(window, username, self.link, keys)
         #print (data)
         if data is not None:
             for i in range(len(data)):
@@ -69,8 +72,8 @@ class DownloadThread(QThread):
                 #print (request)
                 dh.download_video(self, request, row[2], row[0], row[1], {row[13]}, {row[6]}, {row[5]}, os.getcwd(), self.fileFormat, self.fileQuality, self.fileFlacCompressionLevel)
 
-            if window.explorerCheckBox.isChecked():
-                os.startfile(os.getcwd())
+        if window.explorerCheckBox.isChecked():
+                    os.startfile(os.getcwd())
 
         try:
             os.remove(".cache")
@@ -85,7 +88,16 @@ class DownloadThread(QThread):
         window.compressionLevelSpinBox.setEnabled(True)
         window.qualityComboBox.setEnabled(True)
         window.overwriteCheckBox.setEnabled(True)
-        
+        window.spotifyID.setEnabled(True)
+        window.spotifySecret.setEnabled(True)
+
+        if window.formatComboBox.currentIndex() == 0:
+            window.compressionLevelSpinBox.setEnabled(True)
+            window.qualityComboBox.setEnabled(False)
+        elif window.formatComboBox.currentIndex() == 1:
+            window.compressionLevelSpinBox.setEnabled(False)
+            window.qualityComboBox.setEnabled(True)
+
 
 
 class MainApp(QtWidgets.QMainWindow, Ui_MainWindow):
@@ -128,36 +140,55 @@ class MainApp(QtWidgets.QMainWindow, Ui_MainWindow):
             self.setStyleSheet("background-color: rgb(255, 255, 255); color: rgb(0, 0, 0);")
 
     def removeKeys(self):
-        #edit the two line boxes to be empty
-        self.spotifyID.setText("")
-        self.spotifySecret.setText("")
-        #empty the keys file
-        with open(keys, "w") as f:
-            f.write("")
-        f.close()
+        try:
+            #edit the two line boxes to be empty
+            self.spotifyID.setText("")
+            self.spotifySecret.setText("")
+            #empty the keys file
+            with open(keys, "w") as f:
+                f.write("")
+            f.close()
+        except FileNotFoundError as e:
+            print (e)
+        except PermissionError as e:
+            print (e)
 
     def saveKeys(self):
-        #save the keys to the file
-        with open(keys, "w") as f:
-            f.write(self.spotifyID.text() + "\n")
-            f.write(self.spotifySecret.text())
-        f.close()
+        try:
+            #save the keys to the file
+            with open(keys, "w") as f:
+                f.write(self.spotifyID.text() + "\n")
+                f.write(self.spotifySecret.text())
+            f.close()
+        except FileNotFoundError as e:
+            print (e)
+        except PermissionError as e:
+            print (e)
 
     def loadKeys(self):
-        #get first line of keys file
-        f = open(keys, "r")
-        self.spotifyID.setText(f.readline().rstrip('\n'))
-        #get second line of keys file
-        self.spotifySecret.setText(f.readline().rstrip('\n'))
-        f.close()
+        try:
+            #get first line of keys file
+            f = open(keys, "r")
+            self.spotifyID.setText(f.readline().rstrip('\n'))
+            #get second line of keys file
+            self.spotifySecret.setText(f.readline().rstrip('\n'))
+            f.close()
+        except FileNotFoundError as e:
+            print (e)
+        except PermissionError as e:
+            print (e)
 
     def fileQuality(self):
         #get the file format from the combo box
         quality = self.qualityComboBox.currentIndex()
         if quality == 0:
-            return 0
-        elif quality == 1:
             return "320"
+        elif quality == 1:
+            return "256"
+        elif quality == 2:
+            return "192"
+        elif quality == 3:
+            return "128"
         
     def fileFlacCompressionLevel(self):
         #get the file format from the combo box
@@ -198,14 +229,9 @@ class MainApp(QtWidgets.QMainWindow, Ui_MainWindow):
         if self.formatComboBox.currentIndex() == 0:
             self.compressionLevelSpinBox.setEnabled(True)
             self.qualityComboBox.setEnabled(False)
-            self.qualityComboBox.setCurrentIndex(0)
         elif self.formatComboBox.currentIndex() == 1:
             self.compressionLevelSpinBox.setEnabled(False)
             self.qualityComboBox.setEnabled(True)
-            self.qualityComboBox.setCurrentIndex(1)
-            
-
-    
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)

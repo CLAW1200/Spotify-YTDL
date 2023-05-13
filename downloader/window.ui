@@ -10,6 +10,18 @@
     <height>400</height>
    </rect>
   </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>500</width>
+    <height>400</height>
+   </size>
+  </property>
   <property name="maximumSize">
    <size>
     <width>500</width>
@@ -18,10 +30,7 @@
   </property>
   <property name="font">
    <font>
-    <family>Open Sans</family>
-    <pointsize>11</pointsize>
-    <weight>75</weight>
-    <bold>true</bold>
+    <pointsize>12</pointsize>
    </font>
   </property>
   <property name="windowTitle">
@@ -38,7 +47,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>https://open.spotify.com/playlist/20u6LSUqZyWFnCtmgewUx0?si=6eae235a42c94258</string>
+     <string/>
     </property>
    </widget>
    <widget class="QComboBox" name="qualityComboBox">
@@ -55,12 +64,22 @@
     </property>
     <item>
      <property name="text">
-      <string>Uncompressed</string>
+      <string>320kbps</string>
      </property>
     </item>
     <item>
      <property name="text">
-      <string>320kbps</string>
+      <string>256kbps</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>192kbps</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>128kbps</string>
      </property>
     </item>
    </widget>
@@ -88,6 +107,15 @@
       <width>391</width>
       <height>20</height>
      </rect>
+    </property>
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+      <horstretch>0</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
+    </property>
+    <property name="autoFillBackground">
+     <bool>false</bool>
     </property>
    </widget>
    <widget class="QLineEdit" name="spotifySecret">
@@ -165,7 +193,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>C:\Users\%user%\Music</string>
+     <string/>
     </property>
    </widget>
    <widget class="QCheckBox" name="darkModeCheckBox">
@@ -274,11 +302,6 @@
       <string>MP3</string>
      </property>
     </item>
-    <item>
-     <property name="text">
-      <string/>
-     </property>
-    </item>
    </widget>
    <widget class="QSpinBox" name="compressionLevelSpinBox">
     <property name="geometry">
@@ -306,7 +329,7 @@
      <x>0</x>
      <y>0</y>
      <width>500</width>
-     <height>26</height>
+     <height>27</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">

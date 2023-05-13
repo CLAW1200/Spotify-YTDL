@@ -1,5 +1,5 @@
 
-def call_playlist(creator, playlist_id, keys):
+def call_playlist(window, creator, playlist_id, keys):
     import spotipy
     from spotipy.oauth2 import SpotifyClientCredentials
     import pandas as pd
@@ -47,12 +47,15 @@ def call_playlist(creator, playlist_id, keys):
         print ("Check Your Playlist Link.")
         print (e)
         print ("\n")
+        """window.playlistLinkBox.setStyleSheet("color: red;")"""
         return
     except spotipy.oauth2.SpotifyOauthError as e:
         print ("\n")
         print ("Check Your API Keys.")
         print (e)
         print ("\n")
+        """window.spotifyID.setStyleSheet("color: red;")
+        window.spotifySecret.setStyleSheet("color: red;")"""
         return
 
     for track in playlist:
