@@ -19,7 +19,6 @@ def metadata(inputFile, title, artist, album, bpm, key, energy):
         audio["COMMENT"] = comment
         audio["GENRE"] = str(list(energy)[0])
         audio["BPM"] = str(round(proper_round(list(bpm)[0])))
-        print(audio.pprint())
         audio.save()
     
     elif inputFile.endswith(".mp3"):
@@ -58,7 +57,6 @@ def convertType(inputFile, path, artist, fileFormat, overwrite, fileQuality, fil
     
     cmd.append(f"{artist} - {outputFile}")
 
-    print ("cmd: " + str(cmd))
     subprocess.run(cmd, cwd=path)
     os.remove(inputFile)
     return f"{artist} - {outputFile}"

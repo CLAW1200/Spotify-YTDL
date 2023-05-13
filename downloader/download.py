@@ -2,7 +2,6 @@ def download_video(self, request, title, artist, album, bpm, key, energy, path, 
     import yt_dlp as ydl
     import data as data
     import re
-    print ("requestTitle " + request)
 
     def progress_hook(d):
         status = d['status']
@@ -23,7 +22,6 @@ def download_video(self, request, title, artist, album, bpm, key, energy, path, 
             
         if status == 'finished':
             filename = (d['filename'])
-            print ("filename ", filename)
             overwrite = self.get_overwriteCheckBox()
             filename = str(data.convertType(filename, path, artist, fileFormat, overwrite, fileQuality, fileFlacCompressionLevel))
             data.metadata(filename, title, artist, album, bpm, key, energy)
@@ -45,7 +43,6 @@ def download_video(self, request, title, artist, album, bpm, key, energy, path, 
         try:
             ydl.download([request])
         except FileNotFoundError:
-            print ("File not found")
             self.songProgress_updated.emit(0)
             self.totalProgress_updated.emit(0)
             return
