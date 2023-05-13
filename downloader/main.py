@@ -37,19 +37,11 @@ class DownloadThread(QThread):
 
     def get_overwriteCheckBox(self):
         return window.overwriteCheckBox.isChecked()
+    
+    
 
-    def run(self):
-        #disable download button and boxes
-        window.spotifyID.setEnabled(False)
-        window.spotifySecret.setEnabled(False)
-        window.downloadButton.setEnabled(False)
-        window.playlistLinkBox.setEnabled(False)
-        window.savePathBox.setEnabled(False)
-        window.formatComboBox.setEnabled(False)
-        window.compressionLevelSpinBox.setEnabled(False)
-        window.qualityComboBox.setEnabled(False)
-        window.overwriteCheckBox.setEnabled(False)
-
+    def run(self):        
+        window.setObjectStates(False)
         username = ""
         try:
             os.chdir(self.save_path)
@@ -79,16 +71,8 @@ class DownloadThread(QThread):
             pass
         self.totalProgress_updated.emit(0)
         self.songProgress_updated.emit(0)
-        window.downloadButton.setEnabled(True)
-        window.playlistLinkBox.setEnabled(True)
-        window.savePathBox.setEnabled(True)
-        window.formatComboBox.setEnabled(True)
-        window.compressionLevelSpinBox.setEnabled(True)
-        window.qualityComboBox.setEnabled(True)
-        window.overwriteCheckBox.setEnabled(True)
-        window.spotifyID.setEnabled(True)
-        window.spotifySecret.setEnabled(True)
-
+        
+        window.setObjectStates(True)
         if window.formatComboBox.currentIndex() == 0:
             window.compressionLevelSpinBox.setEnabled(True)
             window.qualityComboBox.setEnabled(False)
@@ -138,6 +122,18 @@ class MainApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.formatComboBox.currentIndexChanged.connect(self.formatComboBoxStateChange)
         #expandWindow radio button
         self.expandWindowButton.clicked.connect(self.expandWindow)
+
+    def setObjectStates(self, state):
+        self.downloadButton.setEnabled(state)
+        self.playlistLinkBox.setEnabled(state)
+        self.savePathBox.setEnabled(state)
+        self.formatComboBox.setEnabled(state)
+        self.compressionLevelSpinBox.setEnabled(state)
+        self.qualityComboBox.setEnabled(state)
+        #self.overwriteCheckBox.setEnabled(state)
+        self.spotifyID.setEnabled(state)
+        self.spotifySecret.setEnabled(state)
+
 
     def expandWindow(self):
         if self.expandWindowButton.isChecked():
