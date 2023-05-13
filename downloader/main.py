@@ -27,13 +27,29 @@ class DownloadThread(QThread):
     def set_save_path(self, save_path):
         self.save_path = save_path
 
+    def set_fileQuality(self, fileQuality):
+        self.fileQuality = fileQuality
+
     def set_fileFormat(self, fileFormat):
         self.fileFormat = fileFormat
+
+    def set_fileFlacCompressionLevel(self, fileFlacCompressionLevel):
+        self.fileFlacCompressionLevel = fileFlacCompressionLevel
 
     def get_overwriteCheckBox(self):
         return window.overwriteCheckBox.isChecked()
 
     def run(self):
+
+        #disable download button and boxes
+        window.downloadButton.setEnabled(False)
+        window.playlistLinkBox.setEnabled(False)
+        window.savePathBox.setEnabled(False)
+        window.formatComboBox.setEnabled(False)
+        window.compressionLevelSpinBox.setEnabled(False)
+        window.qualityComboBox.setEnabled(False)
+        window.overwriteCheckBox.setEnabled(False)
+
         username = ""
         try:
             os.chdir(self.save_path)
@@ -48,10 +64,10 @@ class DownloadThread(QThread):
                 self.totalProgress_updated.emit((i+1)/len(data)*100)
                 row = data.iloc[i].tolist()
                 print (row)
-                request = str(f'{row[2]} {row[0]} {row[1]} "provided to youtube"')
+                request = str(f'{row[2]} {row[0]} "provided to youtube"')
                 #track, artist, album
                 #print (request)
-                dh.download_video(self, request, row[2], row[0], row[1], {row[13]}, {row[6]}, {row[5]}, os.getcwd(), self.fileFormat)
+                dh.download_video(self, request, row[2], row[0], row[1], {row[13]}, {row[6]}, {row[5]}, os.getcwd(), self.fileFormat, self.fileQuality, self.fileFlacCompressionLevel)
 
             if window.explorerCheckBox.isChecked():
                 os.startfile(os.getcwd())
@@ -62,6 +78,14 @@ class DownloadThread(QThread):
             pass
         self.totalProgress_updated.emit(0)
         self.songProgress_updated.emit(0)
+        window.downloadButton.setEnabled(True)
+        window.playlistLinkBox.setEnabled(True)
+        window.savePathBox.setEnabled(True)
+        window.formatComboBox.setEnabled(True)
+        window.compressionLevelSpinBox.setEnabled(True)
+        window.qualityComboBox.setEnabled(True)
+        window.overwriteCheckBox.setEnabled(True)
+        
 
 
 class MainApp(QtWidgets.QMainWindow, Ui_MainWindow):
@@ -75,7 +99,8 @@ class MainApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.username = os.getlogin()
         #set the save path to the user's music folder
         self.savePathBox.setText("C:\\Users\\" + self.username + "\\Music")
-
+        #disable qualityComboBox
+        self.qualityComboBox.setEnabled(False)
         #remove keys action 
         self.actionRemove_Keys.triggered.connect(self.removeKeys)
         #load keys action
@@ -89,8 +114,10 @@ class MainApp(QtWidgets.QMainWindow, Ui_MainWindow):
         # Connect the progress_updated signal to a slot that updates the progress bar
         self.downloadThread.songProgress_updated.connect(self.update_songProgress_bar)
         self.downloadThread.totalProgress_updated.connect(self.update_totalProgress_bar)
+        #format state changed
+        self.formatComboBox.currentIndexChanged.connect(self.formatComboBoxStateChange)
 
-    def print(self, text):
+    def logToConsoleGUI(self, text):
         self.consoleOutput.append(f"{text}\n")
 
     
@@ -124,13 +151,26 @@ class MainApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.spotifySecret.setText(f.readline().rstrip('\n'))
         f.close()
 
+    def fileQuality(self):
+        #get the file format from the combo box
+        quality = self.qualityComboBox.currentIndex()
+        if quality == 0:
+            return 0
+        elif quality == 1:
+            return "320"
+        
+    def fileFlacCompressionLevel(self):
+        #get the file format from the combo box
+        quality = self.compressionLevelSpinBox.value()
+        return quality
+        
     def fileFormat(self):
         #get the file format from the combo box
-        format = self.formatComboBox.currentText()
-        if format == "MP3":
-            return "mp3"
-        elif format == "FLAC":
+        format = self.formatComboBox.currentIndex()
+        if format == 0:
             return "flac"
+        elif format == 1:
+            return "mp3"
 
     def downloadPlaylist(self):
         # Get playlist link
@@ -139,7 +179,9 @@ class MainApp(QtWidgets.QMainWindow, Ui_MainWindow):
         # Set the link in the DownloadThread object
         self.downloadThread.set_link(link)
         self.downloadThread.set_save_path(self.savePathBox.text().replace("\\", "/"))
+        self.downloadThread.set_fileQuality(self.fileQuality())
         self.downloadThread.set_fileFormat(self.fileFormat())
+        self.downloadThread.set_fileFlacCompressionLevel(self.fileFlacCompressionLevel())
 
         # Start the DownloadThread
         self.downloadThread.start()
@@ -151,6 +193,19 @@ class MainApp(QtWidgets.QMainWindow, Ui_MainWindow):
     def update_totalProgress_bar(self, progress):
         # Update the progress bar with the received progress percentage
         self.totalProgressBar.setValue(int(progress))
+
+    def formatComboBoxStateChange(self):
+        if self.formatComboBox.currentIndex() == 0:
+            self.compressionLevelSpinBox.setEnabled(True)
+            self.qualityComboBox.setEnabled(False)
+            self.qualityComboBox.setCurrentIndex(0)
+        elif self.formatComboBox.currentIndex() == 1:
+            self.compressionLevelSpinBox.setEnabled(False)
+            self.qualityComboBox.setEnabled(True)
+            self.qualityComboBox.setCurrentIndex(1)
+            
+
+    
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)

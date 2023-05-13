@@ -1,4 +1,4 @@
-def download_video(self, request, title, artist, album, bpm, key, energy, path, audio_format):
+def download_video(self, request, title, artist, album, bpm, key, energy, path, fileFormat, fileQuality, fileFlacCompressionLevel):
     import yt_dlp as ydl
     import data as data
     import re
@@ -25,7 +25,7 @@ def download_video(self, request, title, artist, album, bpm, key, energy, path, 
             filename = (d['filename'])
             print ("filename ", filename)
             overwrite = self.get_overwriteCheckBox()
-            filename = str(data.convertType(filename, path, artist, audio_format, overwrite))
+            filename = str(data.convertType(filename, path, artist, fileFormat, overwrite, fileQuality, fileFlacCompressionLevel))
             data.metadata(filename, title, artist, album, bpm, key, energy)
 
 
@@ -36,10 +36,16 @@ def download_video(self, request, title, artist, album, bpm, key, energy, path, 
     'match-title':f"{request}",
     'default_search': 'ytsearch',
     'extract-audio': True,
-    'audio-format': '%(audio_format)s',
+    'audio-format': '%(fileFormat)s',
     'outtmpl':'%(title)s.%(ext)s',
     'noplaylist':True,
     'nocheckcertificate':True,
     }
     with ydl.YoutubeDL(ydl_opts) as ydl:
-        ydl.download([request])
+        try:
+            ydl.download([request])
+        except FileNotFoundError:
+            print ("File not found")
+            self.songProgress_updated.emit(0)
+            self.totalProgress_updated.emit(0)
+            return
