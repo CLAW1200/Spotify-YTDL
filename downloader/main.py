@@ -96,11 +96,8 @@ class MainApp(QtWidgets.QMainWindow, Ui_MainWindow):
         console_widget = ConsoleWidget(self.consoleTextBox)
 
         # Redirect stdout and stderr to the console widget
-
-
-        #sys.stdout = console_widget
-        #sys.stderr = console_widget
-
+        sys.stdout = console_widget
+        sys.stderr = console_widget
 
         #get windows explorer user
         self.username = os.getlogin()

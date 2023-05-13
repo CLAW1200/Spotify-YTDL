@@ -3,7 +3,8 @@ def call_playlist(creator, playlist_id, keys):
     from spotipy.oauth2 import SpotifyClientCredentials
     import pandas as pd
     import subprocess
-    
+    print ("Getting playlist data...")
+    print ("This could take some time.")
     file = keys
     while True:
         try:
@@ -38,7 +39,6 @@ def call_playlist(creator, playlist_id, keys):
             if len(playlist) == 0:
                 break
             offset += len(playlist)
-            print (f"offset is {offset}")
         except spotipy.client.SpotifyException as e:
             print("\n")
             print("Check Your Playlist Link.")
