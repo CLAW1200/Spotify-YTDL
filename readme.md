@@ -9,7 +9,7 @@ Getting Spotify's API access:
 - You just need a Spotify account.
 - Login to https://developer.spotify.com/dashboard/applications and create an application.
 - Open the app and copy the Client ID and Client Secret.
-- You will only need to enter these once.
+- You should only need to enter these once.
   
 Run main.py to open the GUI.
 (Your playlist will need to be public)
