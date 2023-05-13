@@ -1,6 +1,6 @@
 import os
 from PyQt5.QtCore import QThread
-from PyQt5 import QtWidgets, uic, QtCore
+from PyQt5 import QtWidgets, uic
 from PyQt5.QtCore import QThread, pyqtSignal
 import download as dh
 import playlist as pl
@@ -40,18 +40,15 @@ class DownloadThread(QThread):
     
     
 
-    def run(self):        
+    def run(self):      
         window.setObjectStates(False)
         username = ""
         try:
             os.chdir(self.save_path)
         except OSError:
             print("Path not found")
-            print("Path set to current directory")
-        os.chdir(os.getcwd())
-
         data = pl.call_playlist(username, self.link, keys)
-        #print(data)
+        print(data)
         if data is not None:
             for i in range(len(data)):
                 self.totalProgress_updated.emit((i+1)/len(data)*100)
@@ -59,7 +56,7 @@ class DownloadThread(QThread):
                 print(row)
                 request = str(f'{row[2]} {row[0]} "provided to youtube"')
                 #track, artist, album
-                #print(request)
+                print(request)
                 dh.download_video(self, request, row[2], row[0], row[1], {row[13]}, {row[6]}, {row[5]}, os.getcwd(), self.fileFormat, self.fileQuality, self.fileFlacCompressionLevel)
 
         if window.explorerCheckBox.isChecked():
@@ -99,8 +96,12 @@ class MainApp(QtWidgets.QMainWindow, Ui_MainWindow):
         console_widget = ConsoleWidget(self.consoleTextBox)
 
         # Redirect stdout and stderr to the console widget
-        sys.stdout = console_widget
-        sys.stderr = console_widget
+
+
+        #sys.stdout = console_widget
+        #sys.stderr = console_widget
+
+
         #get windows explorer user
         self.username = os.getlogin()
         #set the save path to the user's music folder
@@ -143,13 +144,7 @@ class MainApp(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def removeKeys(self):
         try:
-            #edit the two line boxes to be empty
-            self.spotifyID.setText("")
-            self.spotifySecret.setText("")
-            #empty the keys file
-            with open(keys, "w") as f:
-                f.write("")
-            f.close()
+            os.remove("secret.keys")
         except FileNotFoundError as e:
             print(e)
         except PermissionError as e:

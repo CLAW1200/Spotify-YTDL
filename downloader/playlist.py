@@ -1,4 +1,3 @@
-
 def call_playlist(creator, playlist_id, keys):
     import spotipy
     from spotipy.oauth2 import SpotifyClientCredentials
@@ -31,43 +30,48 @@ def call_playlist(creator, playlist_id, keys):
     playlist_features_list = ["artist","album","track_name",  "track_id","danceability","energy","key","loudness","mode", "speechiness","instrumentalness","liveness","valence","tempo", "duration_ms","time_signature"]
     
     playlist_df = pd.DataFrame(columns = playlist_features_list)
-
-    try:
-        playlist = sp.user_playlist_tracks(creator, playlist_id)["items"]
-    except spotipy.client.SpotifyException as e:
-        print("\n")
-        print("Check Your Playlist Link.")
-        print(e)
-        print("\n")
-        return
-    except spotipy.oauth2.SpotifyOauthError as e:
-        print("\n")
-        print("Check Your API Keys.")
-        print(e)
-        print("\n")
-        return
-
-    for track in playlist:
+    counter = 0
+    offset = 0
+    while True:
         try:
-            # Create empty dict
-            playlist_features = {}
-            # Get metadata
-            playlist_features["artist"] = track["track"]["album"]["artists"][0]["name"]
-            playlist_features["album"] = track["track"]["album"]["name"]
-            playlist_features["track_name"] = track["track"]["name"]
-            playlist_features["track_id"] = track["track"]["id"]
-            
-            # Get audio features
-            audio_features = sp.audio_features(playlist_features["track_id"])[0]
-            for feature in playlist_features_list[4:]:
-                playlist_features[feature] = audio_features[feature]
-            
-            # Concat the dfs
-            track_df = pd.DataFrame(playlist_features, index = [0])
-            playlist_df = pd.concat([playlist_df, track_df], ignore_index = True)
-        except Exception as e:
+            playlist = sp.user_playlist_tracks(creator, playlist_id, offset=offset, fields="items(track(name,id,album(artists(name),name)))")["items"]
+            if len(playlist) == 0:
+                break
+            offset += len(playlist)
+            print (f"offset is {offset}")
+        except spotipy.client.SpotifyException as e:
+            print("\n")
+            print("Check Your Playlist Link.")
             print(e)
+            print("\n")
             return
+        except spotipy.oauth2.SpotifyOauthError as e:
+            print("\n")
+            print("Check Your API Keys.")
+            print(e)
+            print("\n")
+            return
+
+        for track in playlist:
+            counter+=1
+            try:
+                # Create empty dict
+                playlist_features = {}
+                # Get metadata
+                playlist_features["artist"] = track["track"]["album"]["artists"][0]["name"]
+                playlist_features["album"] = track["track"]["album"]["name"]
+                playlist_features["track_name"] = track["track"]["name"]
+                playlist_features["track_id"] = track["track"]["id"]
+                
+                # Get audio features
+                audio_features = sp.audio_features(playlist_features["track_id"])[0]
+                for feature in playlist_features_list[4:]:
+                    playlist_features[feature] = audio_features[feature]
+                
+                # Concat the dfs
+                track_df = pd.DataFrame(playlist_features, index = [0])
+                playlist_df = pd.concat([playlist_df, track_df], ignore_index = True)
+            except Exception as e:
+                print(f"{e} at track {counter}. Skipping.")
+                pass
     return playlist_df
-    
-#artist, album, track_name, track_id, danceability, energy, key, loudness, mode, speechiness, instrumentalness, liveness, valence, tempo, duration_ms, time_signature

@@ -4,3 +4,4 @@ spotify/__pycache__/
 downloader/__pycache__/data.cpython-310.pyc
 downloader/__pycache__/download.cpython-310.pyc
 downloader/__pycache__/playlist.cpython-310.pyc
+downloader/__pycache__/main.cpython-39.pyc
