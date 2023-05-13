@@ -7,8 +7,6 @@ def metadata(inputFile, title, artist, album, bpm, key, energy):
         if num[-1]>='5':
             return float(num[:-2-(not dec)]+str(int(num[-2-(not dec)])+1))
         return float(num[:-1])
-
-    
     
     if inputFile.endswith(".flac"):
         from mutagen.flac import FLAC
@@ -20,7 +18,7 @@ def metadata(inputFile, title, artist, album, bpm, key, energy):
         audio["GENRE"] = str(list(energy)[0])
         audio["BPM"] = str(round(proper_round(list(bpm)[0])))
         audio.save()
-    
+
     elif inputFile.endswith(".mp3"):
         from mutagen.id3 import ID3NoHeaderError
         from mutagen.id3 import ID3, TIT2, TALB, TPE1, TPE2, COMM, TCOM, TCON, TDRC, TRCK

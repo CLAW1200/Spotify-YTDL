@@ -71,7 +71,7 @@ class DownloadThread(QThread):
                 dh.download_video(self, request, row[2], row[0], row[1], {row[13]}, {row[6]}, {row[5]}, os.getcwd(), self.fileFormat, self.fileQuality, self.fileFlacCompressionLevel)
 
         if window.explorerCheckBox.isChecked():
-                    os.startfile(os.getcwd())
+            os.startfile(os.getcwd())
 
         try:
             os.remove(".cache")
