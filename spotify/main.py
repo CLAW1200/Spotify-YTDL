@@ -1,14 +1,15 @@
+import os
 from PyQt5.QtCore import QThread
 from PyQt5 import QtWidgets, uic, QtCore
 from PyQt5.QtCore import QThread, pyqtSignal
-import os
 import download as dh
 import playlist as pl
 import sys
+
+os.chdir(os.path.dirname(os.path.abspath(__file__)))
 qtCreator_file  = "window.ui"
 Ui_MainWindow, QtBaseClass = uic.loadUiType(qtCreator_file)
 keys = os.getcwd() + "\\secret.keys"
-print (keys)
 
 
 class DownloadThread(QThread):
@@ -70,6 +71,11 @@ class MainApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.setupUi(self)
         self.downloadThread = DownloadThread()
 
+        #get windows explorer user
+        self.username = os.getlogin()
+        #set the save path to the user's music folder
+        self.savePathBox.setText("C:\\Users\\" + self.username + "\\Music")
+
         #remove keys action 
         self.actionRemove_Keys.triggered.connect(self.removeKeys)
         #load keys action
@@ -83,6 +89,9 @@ class MainApp(QtWidgets.QMainWindow, Ui_MainWindow):
         # Connect the progress_updated signal to a slot that updates the progress bar
         self.downloadThread.songProgress_updated.connect(self.update_songProgress_bar)
         self.downloadThread.totalProgress_updated.connect(self.update_totalProgress_bar)
+
+    def print(self, text):
+        self.consoleOutput.append(f"{text}\n")
 
     
     def darkMode(self):
@@ -99,7 +108,6 @@ class MainApp(QtWidgets.QMainWindow, Ui_MainWindow):
         with open(keys, "w") as f:
             f.write("")
         f.close()
-
 
     def saveKeys(self):
         #save the keys to the file
@@ -147,6 +155,7 @@ class MainApp(QtWidgets.QMainWindow, Ui_MainWindow):
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
     window = MainApp()
+    window.setWindowTitle("Spotify Playlist Downloader")
     window.show()
     try:
         window.loadKeys()
