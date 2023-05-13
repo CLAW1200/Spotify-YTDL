@@ -1,4 +1,5 @@
-![new](https://github.com/CLAW1200/Spotify-YTDL/assets/92749103/b2c551e1-adfa-423d-89d9-e3e265b2b2a1)
+![newsmall](https://github.com/CLAW1200/Spotify-YTDL/assets/92749103/af7f8a63-f134-4686-8e3b-580b3331330e)
+
 # Download your spotify playlists as FLAC or MP3
 
 
