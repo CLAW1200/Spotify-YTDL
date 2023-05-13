@@ -21,4 +21,4 @@ Method of obtaining the audio (v2.2):
 
 Currently, every search has the word "provided to youtube" appended to the request. The reason for this is due to the way artist's distribute music on platforms.
 If a YouTube channel looks something like "Artist Name - Topic" then it means it came from the distributing platform that also sent the audio to platforms such as Spotify and Itunes.
-Music from these channels are the exact same audio file as the ones released on Spotify (NOT LOSSLESS), so prioritizing these in the search is a good way of getting the exact audio at a high quality. 
+Music from these channels are the exact same audio file as the ones released on Spotify (still compressed by youtube at 320kbps however), so prioritizing these in the search is a good way of getting the exact audio at a high quality (320kbps is the highest supported by YouTube at the moment). 
