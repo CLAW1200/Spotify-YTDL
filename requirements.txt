@@ -1,3 +1,4 @@
 PyQt5==5.15.7
 mutagen==1.46.0
 yt-dlp==2023.2.17
+spotipy==2.21.0
