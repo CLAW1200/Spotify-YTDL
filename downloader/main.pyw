@@ -1,6 +1,6 @@
 import os
 from PyQt5.QtCore import QThread
-from PyQt5 import QtWidgets, uic
+from PyQt5 import QtWidgets, uic, QtGui
 from PyQt5.QtCore import QThread, pyqtSignal
 import download as dh
 import playlist as pl
@@ -38,10 +38,9 @@ class DownloadThread(QThread):
     def get_overwriteCheckBox(self):
         return window.overwriteCheckBox.isChecked()
     
-    
-
     def run(self):      
         window.setObjectStates(False)
+        window.saveKeys()
         username = ""
         try:
             os.chdir(self.save_path)
@@ -82,8 +81,10 @@ class ConsoleWidget:
         self.text_edit = text_edit
 
     def write(self, text):
+        #insert text at top of textbox
         self.text_edit.insertPlainText(text)
-
+        #scroll to bottom
+        self.text_edit.moveCursor(QtGui.QTextCursor.End)
 
 class MainApp(QtWidgets.QMainWindow, Ui_MainWindow):
     def __init__(self):
@@ -132,7 +133,6 @@ class MainApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.spotifyID.setEnabled(state)
         self.spotifySecret.setEnabled(state)
 
-
     def expandWindow(self):
         if self.expandWindowButton.isChecked():
             self.setFixedSize(800, 400)
@@ -141,7 +141,7 @@ class MainApp(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def removeKeys(self):
         try:
-            os.remove("secret.keys")
+            os.remove(keys)
             self.spotifyID.setText("")
             self.spotifySecret.setText("")
             print ("Keys Deleted")
@@ -232,7 +232,6 @@ class MainApp(QtWidgets.QMainWindow, Ui_MainWindow):
             self.compressionLevelSpinBox.setEnabled(False)
             self.qualityComboBox.setEnabled(True)
 
-
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
     window = MainApp()
@@ -243,4 +242,3 @@ if __name__ == "__main__":
     except FileNotFoundError:
         print("No keys file found")
     sys.exit(app.exec_())
-
