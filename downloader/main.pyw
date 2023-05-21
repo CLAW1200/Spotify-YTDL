@@ -2,8 +2,8 @@ import os
 from PyQt5.QtCore import QThread
 from PyQt5 import QtWidgets, uic, QtGui
 from PyQt5.QtCore import QThread, pyqtSignal
-import download as dh
-import playlist as pl
+import spDownload as dh
+import spPlaylist as pl
 import sys
 
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
@@ -97,8 +97,8 @@ class MainApp(QtWidgets.QMainWindow, Ui_MainWindow):
         console_widget = ConsoleWidget(self.consoleTextBox)
 
         # Redirect stdout and stderr to the console widget
-        sys.stdout = console_widget
-        sys.stderr = console_widget
+        #sys.stdout = console_widget
+        #sys.stderr = console_widget
 
         #get windows explorer user
         self.username = os.getlogin()
@@ -188,6 +188,14 @@ class MainApp(QtWidgets.QMainWindow, Ui_MainWindow):
             return "192"
         elif quality == 3:
             return "128"
+        elif quality == 4:
+            return "96"
+        elif quality == 5:
+            return "64"
+        elif quality == 6:
+            return "32"
+        elif quality == 7:
+            return "16"
         
     def fileFlacCompressionLevel(self):
         #get the file format from the combo box

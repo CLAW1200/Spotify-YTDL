@@ -88,6 +88,26 @@
       <string>128kbps</string>
      </property>
     </item>
+    <item>
+     <property name="text">
+      <string>96kbps</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>64kbps</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>32kbps</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>16kbps</string>
+     </property>
+    </item>
    </widget>
    <widget class="QPushButton" name="downloadButton">
     <property name="geometry">

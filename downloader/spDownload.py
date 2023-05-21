@@ -1,6 +1,6 @@
 def download_video(self, request, title, artist, album, bpm, key, energy, path, fileFormat, fileQuality, fileFlacCompressionLevel):
     import yt_dlp as ydl
-    import data as data
+    import spData as data
     import re
 
     def progress_hook(d):
