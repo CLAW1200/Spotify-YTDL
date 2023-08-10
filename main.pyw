@@ -5,6 +5,7 @@ from PyQt5.QtCore import QThread, pyqtSignal
 import spDownload as dh
 import spPlaylist as pl
 import sys
+import subprocess
 
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 qtCreator_file  = "window.ui"
@@ -141,10 +142,13 @@ class MainApp(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def removeKeys(self):
         try:
-            os.remove(keys)
+            subprocess.run(["attrib", "-H", keys])
+            with open(keys, "w") as f:
+                f.write("")
             self.spotifyID.setText("")
             self.spotifySecret.setText("")
             print ("Keys Deleted")
+            subprocess.run(["attrib", "+H", keys])
         except FileNotFoundError as e:
             print(e)
         except PermissionError as e:
@@ -152,12 +156,13 @@ class MainApp(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def saveKeys(self):
         try:
+            subprocess.run(["attrib", "-H", keys])
             #save the keys to the file
             with open(keys, "w") as f:
                 f.write(self.spotifyID.text() + "\n")
                 f.write(self.spotifySecret.text())
-            f.close()
             print("Keys Saved")
+            subprocess.run(["attrib", "+H", keys])
         except FileNotFoundError as e:
             print(e)
         except PermissionError as e:
@@ -165,13 +170,14 @@ class MainApp(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def loadKeys(self):
         try:
+            subprocess.run(["attrib", "-H", keys])
             #get first line of keys file
             f = open(keys, "r")
             self.spotifyID.setText(f.readline().rstrip('\n'))
             #get second line of keys file
             self.spotifySecret.setText(f.readline().rstrip('\n'))
-            f.close()
             print("Keys Loaded")
+            subprocess.run(["attrib", "+H", keys])
         except FileNotFoundError as e:
             print(e)
         except PermissionError as e:
