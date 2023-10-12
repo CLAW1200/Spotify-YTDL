@@ -33,6 +33,7 @@ def call_playlist(creator, playlist_id, keys):
         while True:
             try:
                 playlist = sp.user_playlist_tracks(creator, playlist_id, offset=offset, fields="items(track(name,id,album(artists(name),name)))")["items"]
+                playlistName = sp.user_playlist(creator, playlist_id, fields="name")["name"]
                 if len(playlist) == 0:
                     break
                 offset += len(playlist)
@@ -59,6 +60,9 @@ def call_playlist(creator, playlist_id, keys):
                     playlist_features["album"] = track["track"]["album"]["name"]
                     playlist_features["track_name"] = track["track"]["name"]
                     playlist_features["track_id"] = track["track"]["id"]
+
+                    playlist_features["playlist"] = playlistName
+
                     
                     # Get audio features
                     audio_features = sp.audio_features(playlist_features["track_id"])[0]

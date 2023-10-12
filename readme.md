@@ -3,6 +3,9 @@
 # Download your spotify playlists as FLAC or MP3
 ![newsmall](https://github.com/CLAW1200/Spotify-YTDL/assets/92749103/af7f8a63-f134-4686-8e3b-580b3331330e)
 
+
+Requires FFMPEG to be installed and added to PATH.
+
 - Download a Spotify Playlist by finding the corresponding audio on YouTube.
 - Downloads as FLAC or MP3 with correct metadata.
 - Choose Compression Level.

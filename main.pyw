@@ -7,6 +7,13 @@ import spPlaylist as pl
 import sys
 import subprocess
 
+#check for ffmpeg in path
+try:
+    subprocess.run(["ffmpeg", "-version"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+except FileNotFoundError:
+    print("ffmpeg not found in path")
+    sys.exit(1)
+
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 qtCreator_file  = "window.ui"
 Ui_MainWindow, QtBaseClass = uic.loadUiType(qtCreator_file)
@@ -36,8 +43,8 @@ class DownloadThread(QThread):
     def set_fileFlacCompressionLevel(self, fileFlacCompressionLevel):
         self.fileFlacCompressionLevel = fileFlacCompressionLevel
 
-    def get_overwriteCheckBox(self):
-        return window.overwriteCheckBox.isChecked()
+    def get_explorerCheckBox(self):
+        return window.explorerCheckBox.isChecked()
     
     def run(self):      
         window.setObjectStates(False)
@@ -57,11 +64,10 @@ class DownloadThread(QThread):
                 request = str(f'{row[2]} {row[0]} "provided to youtube"')
                 #track, artist, album
                 print(request)
-                dh.download_video(self, request, row[2], row[0], row[1], {row[13]}, {row[6]}, {row[5]}, os.getcwd(), self.fileFormat, self.fileQuality, self.fileFlacCompressionLevel)
+                dh.download_video(self, request, row[2], row[0], row[1], {row[13]}, {row[6]}, {row[5]}, os.getcwd(), self.fileFormat, self.fileQuality, self.fileFlacCompressionLevel, ({row[16]}))
 
         if window.explorerCheckBox.isChecked():
             os.startfile(os.getcwd())
-
         try:
             os.remove(".cache")
         except FileNotFoundError:
@@ -77,10 +83,6 @@ class DownloadThread(QThread):
             window.compressionLevelSpinBox.setEnabled(False)
             window.qualityComboBox.setEnabled(True)
 
-class ConsoleWidget:
-    def __init__(self, text_edit):
-        self.text_edit = text_edit
-
     def write(self, text):
         #insert text at top of textbox
         self.text_edit.insertPlainText(text)
@@ -93,13 +95,6 @@ class MainApp(QtWidgets.QMainWindow, Ui_MainWindow):
         Ui_MainWindow.__init__(self)
         self.setupUi(self)
         self.downloadThread = DownloadThread()
-
-        # Create a console widget
-        console_widget = ConsoleWidget(self.consoleTextBox)
-
-        # Redirect stdout and stderr to the console widget
-        #sys.stdout = console_widget
-        #sys.stderr = console_widget
 
         #get windows explorer user
         self.username = os.getlogin()

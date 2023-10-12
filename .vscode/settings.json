@@ -2,11 +2,13 @@
     "cSpell.words": [
         "bestaudio",
         "danceability",
+        "getall",
         "getlogin",
         "instrumentalness",
         "nocheckcertificate",
         "noplaylist",
         "outtmpl",
+        "setall",
         "speechiness",
         "spotipy",
         "startfile",

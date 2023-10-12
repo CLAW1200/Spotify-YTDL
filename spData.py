@@ -1,12 +1,14 @@
-def metadata(inputFile, title, artist, album, bpm, key, energy):
+def metadata(inputFile, title, artist, album, bpm, key, energy, comment):
 
-    comment = "github.com/claw1200"
 
     def proper_round(num, dec=0):
         num = str(num)[:str(num).index('.')+dec+2]
         if num[-1]>='5':
             return float(num[:-2-(not dec)]+str(int(num[-2-(not dec)])+1))
         return float(num[:-1])
+    
+    comment = str(comment)
+    comment = comment[2:-2]
     
     if inputFile.endswith(".flac"):
         from mutagen.flac import FLAC
@@ -54,8 +56,13 @@ def convertType(inputFile, path, artist, fileFormat, overwrite, fileQuality, fil
         cmd.append(f"{fileQuality}k")
     
     cmd.append(f"{artist} - {outputFile}")
-
-    subprocess.run(cmd, cwd=path)
+    print (path)
+    try:
+        subprocess.run(cmd, cwd=path)
+    except:
+        print("Error converting file")
+        print("MAKE SURE FFMPEG IS INSTALLED AND IN PATH")
+        raise SystemExit
     os.remove(inputFile)
     return f"{artist} - {outputFile}"
 

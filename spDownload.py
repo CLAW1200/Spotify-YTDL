@@ -1,4 +1,4 @@
-def download_video(self, request, title, artist, album, bpm, key, energy, path, fileFormat, fileQuality, fileFlacCompressionLevel):
+def download_video(self, request, title, artist, album, bpm, key, energy, path, fileFormat, fileQuality, fileFlacCompressionLevel, playlistTitle):
     import yt_dlp as ydl
     import spData as data
     import re
@@ -24,7 +24,7 @@ def download_video(self, request, title, artist, album, bpm, key, energy, path, 
             filename = (d['filename'])
             overwrite = self.get_overwriteCheckBox()
             filename = str(data.convertType(filename, path, artist, fileFormat, overwrite, fileQuality, fileFlacCompressionLevel))
-            data.metadata(filename, title, artist, album, bpm, key, energy)
+            data.metadata(filename, title, artist, album, bpm, key, energy, playlistTitle)
 
 
     ydl_opts = {
