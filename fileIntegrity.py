@@ -1,3 +1,8 @@
+"""
+To do:
+Change code so that rather that being passed directory, it is passed a list of files
+This is easier said than done, good luck future me!
+"""
 import os
 import re
 from mutagen.flac import FLAC
@@ -44,7 +49,7 @@ def getMetadata(file):
         metadataTitle = ""
         filenameWithoutExtension = ""
         pass
-    
+
     if file.endswith(".flac"):
         # Read FLAC metadata
         audio = FLAC(file)
@@ -211,5 +216,5 @@ if __name__ == "__main__":
     A command line interface to check and correct the metadata of all files in a directory
     """
     filePath = "C:\\Users\\User\\Music\\test\\"
-    mismatchedFiles = checkMetadata(filePath)
+    mismatchedFiles = checkMetadata(filePath) # --> mismatchedFiles = checkMetadata(getFileListFromDirectory())
     menu(mismatchedFiles, filePath)
