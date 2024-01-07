@@ -123,8 +123,8 @@ class MainApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.downloadThread.totalProgress_updated.connect(self.update_totalProgress_bar)
         #format state changed
         self.formatComboBox.currentIndexChanged.connect(self.formatComboBoxStateChange)
-        #expandWindow radio button
-        #self.expandWindowButton.clicked.connect(self.expandWindow) # not in the window.ui file
+        #overwrite checkbox
+        self.overwriteCheckBox.setChecked(False)
 
     def setObjectStates(self, state):
         self.downloadButton.setEnabled(state)
