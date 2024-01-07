@@ -46,6 +46,9 @@ class DownloadThread(QThread):
     def get_explorerCheckBox(self):
         return window.explorerCheckBox.isChecked()
     
+    def get_overwriteCheckBox(self):
+        return window.overwriteCheckBox.isChecked()
+    
     def run(self):      
         window.setObjectStates(False)
         window.saveKeys()
@@ -115,8 +118,8 @@ class MainApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.downloadThread.totalProgress_updated.connect(self.update_totalProgress_bar)
         #format state changed
         self.formatComboBox.currentIndexChanged.connect(self.formatComboBoxStateChange)
-        #expandWindow radio button
-        self.expandWindowButton.clicked.connect(self.expandWindow)
+        #overwrite checkbox
+        self.overwriteCheckBox.setChecked(False)
 
     def setObjectStates(self, state):
         self.downloadButton.setEnabled(state)

@@ -2,3 +2,4 @@ secret.keys
 .cache
 Playlist Downloader.lnk
 /__pycache__/
+*.part
