@@ -1,5 +1,5 @@
 import os 
-keys = os.getcwd() + "\\secret.keys"
+keys = os.path.join(os.getcwd() , "secret.keys")
 
 def read_keys():
     with open(keys, "r") as f:
