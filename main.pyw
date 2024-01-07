@@ -17,7 +17,7 @@ except FileNotFoundError:
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 qtCreator_file  = "window.ui"
 Ui_MainWindow, QtBaseClass = uic.loadUiType(qtCreator_file)
-keys = os.getcwd() + "\\secret.keys"
+keys = os.path.join(os.getcwd() , "secret.keys")
 
 class DownloadThread(QThread):
     # Define a custom signal that emits the current progress percentage
@@ -70,7 +70,12 @@ class DownloadThread(QThread):
                 dh.download_video(self, request, row[2], row[0], row[1], {row[13]}, {row[6]}, {row[5]}, os.getcwd(), self.fileFormat, self.fileQuality, self.fileFlacCompressionLevel, ({row[16]}))
 
         if window.explorerCheckBox.isChecked():
-            os.startfile(os.getcwd())
+            if sys.platform == "win32":
+                os.startfile(os.getcwd())
+            else:
+                opener = "open" if sys.platform == "darwin" else "xdg-open"
+                subprocess.call([opener, os.getcwd()])
+            
         try:
             os.remove(".cache")
         except FileNotFoundError:
@@ -102,7 +107,7 @@ class MainApp(QtWidgets.QMainWindow, Ui_MainWindow):
         #get windows explorer user
         self.username = os.getlogin()
         #set the save path to the user's music folder
-        self.savePathBox.setText("C:\\Users\\" + self.username + "\\Music")
+        self.savePathBox.setText(os.path.expanduser(os.path.join('~', "Music")))    
         #disable qualityComboBox
         self.qualityComboBox.setEnabled(False)
         #remove keys action 
@@ -140,13 +145,15 @@ class MainApp(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def removeKeys(self):
         try:
-            subprocess.run(["attrib", "-H", keys])
+            if sys.platform == "win32":
+                subprocess.run(["attrib", "-H", keys])
             with open(keys, "w") as f:
                 f.write("")
             self.spotifyID.setText("")
             self.spotifySecret.setText("")
             print ("Keys Deleted")
-            subprocess.run(["attrib", "+H", keys])
+            if sys.platform == "win32":
+                subprocess.run(["attrib", "+H", keys])
         except FileNotFoundError as e:
             print(e)
         except PermissionError as e:
@@ -154,13 +161,15 @@ class MainApp(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def saveKeys(self):
         try:
-            subprocess.run(["attrib", "-H", keys])
+            if sys.platform == "win32":
+                subprocess.run(["attrib", "-H", keys])
             #save the keys to the file
             with open(keys, "w") as f:
                 f.write(self.spotifyID.text() + "\n")
                 f.write(self.spotifySecret.text())
             print("Keys Saved")
-            subprocess.run(["attrib", "+H", keys])
+            if sys.platform == "win32":
+                subprocess.run(["attrib", "+H", keys])
         except FileNotFoundError as e:
             print(e)
         except PermissionError as e:
@@ -168,14 +177,16 @@ class MainApp(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def loadKeys(self):
         try:
-            subprocess.run(["attrib", "-H", keys])
+            if sys.platform == "win32":
+                subprocess.run(["attrib", "-H", keys])
             #get first line of keys file
             f = open(keys, "r")
             self.spotifyID.setText(f.readline().rstrip('\n'))
             #get second line of keys file
             self.spotifySecret.setText(f.readline().rstrip('\n'))
             print("Keys Loaded")
-            subprocess.run(["attrib", "+H", keys])
+            if sys.platform == "win32":
+                subprocess.run(["attrib", "+H", keys])
         except FileNotFoundError as e:
             print(e)
         except PermissionError as e:

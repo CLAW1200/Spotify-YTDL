@@ -3,6 +3,7 @@ def call_playlist(creator, playlist_id, keys):
     from spotipy.oauth2 import SpotifyClientCredentials
     import pandas as pd
     import subprocess
+    import sys
     print ("Getting playlist data...")
     print ("This could take some time.")
     file = keys
@@ -23,7 +24,8 @@ def call_playlist(creator, playlist_id, keys):
             break
 
     try:
-        subprocess.check_call(["attrib","+H",file])
+        if sys.platform == "win32":
+            subprocess.check_call(["attrib","+H",file]) 
         client_credentials_manager = SpotifyClientCredentials(client_id=cid, client_secret=secret)
         sp = spotipy.Spotify(client_credentials_manager = client_credentials_manager)
         playlist_features_list = ["artist","album","track_name",  "track_id","danceability","energy","key","loudness","mode", "speechiness","instrumentalness","liveness","valence","tempo", "duration_ms","time_signature"]
