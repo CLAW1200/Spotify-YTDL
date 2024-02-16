@@ -51,7 +51,6 @@ def call_playlist(creator, playlist_id, keys):
                 print(e)
                 print("\n")
                 return
-            # create dictionary with plalist id 
 
             for track in playlist:
                 counter+=1
