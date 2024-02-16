@@ -3,6 +3,9 @@ def download_video(self, request, title, artist, album, bpm, key, energy, path, 
     import spData as data
     import re
 
+    title = title.replace("/", "⧸")
+    artist = artist.replace("/", "⧸")
+
     def progress_hook(d):
         status = d['status']
         if status == 'downloading':
@@ -41,7 +44,7 @@ def download_video(self, request, title, artist, album, bpm, key, energy, path, 
     }
     with ydl.YoutubeDL(ydl_opts) as ydl:
         try:
-            ydl.download([request])
+            ydl.download(["\""+request+"\""])
         except FileNotFoundError:
             self.songProgress_updated.emit(0)
             self.totalProgress_updated.emit(0)
